@@ -28,7 +28,7 @@ extern const char* rootCa;
 
 /*Var section*/
 /*------------------------------*/
-//TODO:выполнить сборку URI из консант
+
 bool IMU6886Flag = false;               //disable IMU
 
 char urlStatus[200];                    //URL to recive status
