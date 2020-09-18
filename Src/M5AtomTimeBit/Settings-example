@@ -14,6 +14,7 @@ const char* closeReason="This is the end";              //Message when new day e
 const char* urnStatus = "timeman.status";              //api func. see https://training.bitrix24.com/rest_help/time_management/basic/index.php
 const char* urnOpen = "timeman.open";                  //api func. see https://training.bitrix24.com/rest_help/time_management/basic/index.php
 const char* urnClose = "timeman.close";                //api func. see https://training.bitrix24.com/rest_help/time_management/basic/index.php
+const char* urnPause = "timeman.pause";                //api func. see https://training.bitrix24.com/rest_help/time_management/basic/index.php
 
 const char* rootCa=                                   //bitrix root ssl cert
 "-----BEGIN CERTIFICATE-----\n" \

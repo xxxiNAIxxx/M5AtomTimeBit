@@ -23,6 +23,7 @@ extern const char* closeReason;
 extern const char* urnStatus;
 extern const char* urnOpen;
 extern const char* urnClose;
+extern const char* urnPause;
 
 extern const char* rootCa;
 
@@ -34,6 +35,7 @@ bool IMU6886Flag = false;               //disable IMU
 char urlStatus[200];                    //URL to recive status
 char urlOpen[200];                      //URL to start
 char urlClose[200];                     //URL to close
+char urlPause[200];                     //URL to pause
 
 const char* statusBtrx;                 //Current status (OPENED, CLOSED, PAUSED, EXPIRED, ERROR)
 //TODO:rename StatWifi to FirstWiFiCheck or something.
@@ -86,11 +88,15 @@ void loop()
     }
 
     M5.update();                                          //Update M5
-    if (M5.Btn.wasPressed())                              //Button handler
-      {   
-        Serial.println("\nBtn.Pressed!");                 //Debug message
-        setBitrix();                                      //Open or close work day
-      }
+
+   if (M5.Btn.wasReleasefor(25)){                         //IF
+      if (M5.Btn.wasReleasefor(750)){                     //long press
+          setBitrix(0);                                   // -set state open\close
+        }
+      else{                                               //short press
+          setBitrix(1);                                   // -set state pause\open
+        }
+   }
 
     delay(250);                                           //delay 250 ms
     SystemTimeUpdate++;                                   //Time counter
@@ -129,7 +135,7 @@ void checkBitrix()
 
 /*Change bitrix status
 ------------------------------*/
-void setBitrix()
+void setBitrix(uint8_t setState)
 {
     Serial.println("setBitrix:Start");
     StaticJsonDocument<200> filter;
@@ -137,17 +143,33 @@ void setBitrix()
     StaticJsonDocument<1024> jsonDocument;
     int httpCode=0;
     HTTPClient http;
-  
-    if(strcmp(statusBtrx,"OPENED")==0){
-      Serial.println("setBitrix:Current state - OPENED, will be - CLOSED");
-      http.begin(urlClose, rootCa);
-      httpCode = http.POST(closeReason);
-    };
-    if((strcmp(statusBtrx,"CLOSED")==0) || (strcmp(statusBtrx,"PAUSED")==0)){
-      Serial.println("setBitrix:Current state - CLOSED, will be - OPENED");
-      http.begin(urlOpen, rootCa);
-      httpCode = http.POST(openReason);
-    };
+    switch(setState){
+      case 0:
+        if(strcmp(statusBtrx,"OPENED")==0){
+          Serial.println("setBitrix:Current state - OPENED, will be - CLOSED");
+          http.begin(urlClose, rootCa);
+          httpCode = http.POST(closeReason);
+        };
+        if((strcmp(statusBtrx,"CLOSED")==0) || (strcmp(statusBtrx,"PAUSED")==0)){
+          Serial.println("setBitrix:Current state - CLOSED, will be - OPENED");
+          http.begin(urlOpen, rootCa);
+          httpCode = http.POST(openReason);
+        };
+        break;
+      case 1:
+        if(strcmp(statusBtrx,"OPENED")==0){
+          Serial.println("setBitrix:Current state - OPENED, will be - PAUSED");
+          http.begin(urlPause, rootCa);
+          httpCode = http.POST("");
+        };
+        if(strcmp(statusBtrx,"PAUSED")==0){
+          Serial.println("setBitrix:Current state - PAUSED, will be - OPENED");
+          http.begin(urlOpen, rootCa);
+          httpCode = http.POST(openReason);
+        };
+      break;
+    }
+
    
     if (httpCode > 0) {                                 
           String payload = http.getString();
@@ -193,24 +215,16 @@ void updateScreen(){
 /*Generate URLs from URI (see Setting.ino)
 ------------------------------*/
 void CreateURLs(){
-    strcpy(urlStatus,urnBase);
-    strcat(urlStatus,urnUserId);
-    strcat(urlStatus,urnHookKey);
-    strcat(urlStatus,"timeman.status");
-    Serial.print("urlStatus:");
-    Serial.println(urlStatus);
-  
-    strcpy(urlOpen,urnBase);
-    strcat(urlOpen,urnUserId);
-    strcat(urlOpen,urnHookKey);
-    strcat(urlOpen,"timeman.open");
-    Serial.print("urlOpen:");
-    Serial.println(urlOpen);
+    strcpy(urlStatus,urnBase);                //base urn
+    strcat(urlStatus,urnUserId);              //+user ID
+    strcat(urlStatus,urnHookKey);             //+WebHookAPIKey = basic urn
+
+    strcpy(urlOpen,urlStatus);                //copy basic urn to other var
+    strcpy(urlClose,urlStatus);
+    strcpy(urlPause,urlStatus);
     
-    strcpy(urlClose,urnBase);
-    strcat(urlClose,urnUserId);
-    strcat(urlClose,urnHookKey);
-    strcat(urlClose,"timeman.close");
-    Serial.print("urlClose:");
-    Serial.println(urlClose);
+    strcat(urlStatus,urnStatus);              //basic urn + command
+    strcat(urlOpen,urnOpen);
+    strcat(urlClose,urnClose);
+    strcat(urlPause,urnPause);
 }
