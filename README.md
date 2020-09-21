@@ -1,12 +1,11 @@
 # M5AtomTimeBit
 ## Описание  
 Приложение для [M5Atom Matrix](https://m5stack.com/collections/m5-atom/products/atom-matrix-esp32-development-kit).  
-Выводит на дисплей текущее состояние рабочего дня (открыт, закрыт, пауза). Короткое нажатие включает\отключает перерыв. Длительное открывает\закрывает рабочий день  
+Выводит на дисплей текущее состояние рабочего дня (открыт, закрыт, пауза). Короткое нажатие включает\отключает перерыв. Длительное открывает\закрывает рабочий день.  
 
 ## Конфигурирование  
 Файл Settings-example переименовать в Settings.ino.  
 ```wifiSsid     = "WiFiName"``` - указать имя беспроводной сети  
-```wifiPassword = "WiFiPassword";``` - указать пароль беспроводной сети  
 ```wifiPassword = "WiFiPassword";``` - указать пароль беспроводной сети  
 ```urnBase="https://company.bitrix24.ru/rest/";``` - путь к REST API, указать адрес сайта  
 ```urnUserId="007/";``` - указать номер пользователя  
@@ -33,9 +32,10 @@
   
 При использовании Wi-Fi и FastLed могут наблюдаться мерцания и вспышки отдельных светодиодов (см. [тут](https://github.com/m5stack/M5Atom/issues/15)).  
 Решение: в файле ```M5Atom.cpp``` (...\Documents\Arduino\libraries\M5Atom\src\) необходимо добвать ```dis.setCore(1);``` в секцию ```if( DisplayEnable )```:  
-```if( DisplayEnable )
+```
+if( DisplayEnable )
 {
-    dis.setTaskName("LEDs");
+    	dis.setTaskName("LEDs");
 	dis.setTaskPriority(2);
 	dis.setCore(1);
 	dis.start();
