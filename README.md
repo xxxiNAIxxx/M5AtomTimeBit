@@ -12,7 +12,7 @@
 ```wifiSsid     = "WiFiName"``` - указать имя беспроводной сети  
 ```wifiPassword = "WiFiPassword";``` - указать пароль беспроводной сети  
   
-```urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/";``` - путь к REST API, указать адрес сайта (полное описание см. [тут])  
+```urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/";``` - путь к REST API, указать адрес сайта (см. [FAQ](https://github.com/xxxiNAIxxx/M5AtomTimeBit/wiki/FAQ))  
 ```openReason="Best day of my life";``` - причина начала рабочего дня  
 ```closeReason="This is the end";``` - причина завершения рабочего дня  
     
