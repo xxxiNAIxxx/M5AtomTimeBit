@@ -1,13 +1,18 @@
+/*Prop. zone*/
+/*------------------------------*/
+const int serialSpeed = 115200;                     //Serial speed
+const uint8_t updateTimeInterval=10;                //Update time interval in sec. (=<255 sec.)
+uint8_t brightness=50;                              //!!!Setting the LED brightness to 100 may cause overheating!!!
+
 /*Wi-fi zone*/
 /*------------------------------*/
-const char* wifiSsid     = "WiFiName";          //wi-fi name
-const char* wifiPassword = "WiFiPassword";     //wi-fi password
+const char* wifiSsid     = "wifiName";      //wi-fi name
+const char* wifiPassword = "wifiPassword";     //wi-fi password
 
 /*Bitrix zone*/
 /*------------------------------*/
-const char* urnBase="https://company.bitrix24.ru/rest/"; //Url to REST service
-const char* urnUserId="007/";                            //UserID
-const char* urnHookKey="1234567890qwertyu/";             //WebHook API key
+
+const char* urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/"; //Url to REST service w/o "profile/"
 const char* openReason="Best day of my life";           //Message when new day start
 const char* closeReason="This is the end";              //Message when new day end
 

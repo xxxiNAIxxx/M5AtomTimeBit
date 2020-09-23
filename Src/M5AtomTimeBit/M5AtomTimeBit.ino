@@ -6,16 +6,21 @@
 #include <HTTPClient.h>
 #include <ETH.h>
 
+/*Define section*/
+/*------------------------------*/
+//#define DEBUG                      
+
 /*Extern section*/
 /*------------------------------*/
 extern const unsigned char image_all[302];
+extern const int serialSpeed;
+extern const uint8_t updateTimeInterval;
+extern uint8_t brightness;
 
 extern const char* wifiSsid;   
 extern const char* wifiPassword;
 
 extern const char* urnBase;
-extern const char* urnUserId;
-extern const char* urnHookKey;
 
 extern const char* openReason;
 extern const char* closeReason;
@@ -40,7 +45,7 @@ char urlPause[200];                     //URL to pause
 const char* statusBtrx;                 //Current status (OPENED, CLOSED, PAUSED, EXPIRED, ERROR)
 //TODO:rename StatWifi to FirstWiFiCheck or something.
 bool StatWifi = false;                  //Just flag
-uint8_t SystemTimeUpdate=40;            //Counter to update interval
+uint16_t SystemTimeUpdate=updateTimeInterval*4;            //Counter to update interval
 
 
 /*Program section*/
@@ -49,13 +54,19 @@ void setup()
 {
     M5.begin(true, false, true);                      //Enable M5 Matrix
     delay(100); 
-                                        
+    
+    if (brightness>90){
+      brightness=90;
+      }
+      
+    M5.dis.setBrightness(brightness);                 //Set brightness
+    delay(100);                                
     M5.dis.displaybuff((uint8_t *)image_all, -10, 0); //Show load icon
     delay(50);
     
-    Serial.begin(115200);                             //Activate virtual COM (debug)
+    Serial.begin(serialSpeed);                        //Activate virtual COM (debug)
     delay(50);
-      
+          
     CreateURLs();                                     //Generate URLs from URI (see Setting.ino)
 
     WiFi.begin(wifiSsid, wifiPassword);               //Connect to the network
@@ -63,14 +74,15 @@ void setup()
 
     while (WiFi.status() != WL_CONNECTED) {           //Wait for the Wi-Fi to connect
       delay(500);
-      Serial.print('.');
+      #ifdef DEBUG
+        Serial.print('.');
+      #endif  
     }
-    
-    Serial.println('\n');                             //Just debug messages
-    Serial.println("Connection established");  
-    Serial.print("IP address:\t");
-    Serial.println(WiFi.localIP());
-    Serial.println('\n');
+      Serial.println('\n');                             //Just debug messages
+      Serial.println("Connection established");  
+      Serial.print("IP address:\t");
+      Serial.println(WiFi.localIP());
+      Serial.println('\n'); 
 }
 
 void loop()
@@ -81,7 +93,7 @@ void loop()
     }
     else {                                                //network connected
       StatWifi=false;                                     //
-      if (SystemTimeUpdate>=40){                          //if  time from last update Bitrix status less then 10s (40*250=10 000 ms)
+      if (SystemTimeUpdate>=(updateTimeInterval*4)){      //if  time from last update Bitrix status less then 10s (40*250=10 000 ms)
         checkBitrix();                                    // -update status
         SystemTimeUpdate=0;                               // -reset the counter
       }
@@ -89,7 +101,7 @@ void loop()
 
     M5.update();                                          //Update M5
 
-   if (M5.Btn.wasReleasefor(25)){                         //IF
+   if (M5.Btn.wasReleasefor(15)){                         //IF
       if (M5.Btn.wasReleasefor(750)){                     //long press
           setBitrix(0);                                   // -set state open\close
         }
@@ -100,7 +112,10 @@ void loop()
 
     delay(250);                                           //delay 250 ms
     SystemTimeUpdate++;                                   //Time counter
-    Serial.print(".");                                    //Debug message
+    #ifdef DEBUG
+      Serial.print(".");
+      Serial.print(SystemTimeUpdate);                                  
+    #endif
 }
 
 
@@ -193,19 +208,27 @@ void setBitrix(uint8_t setState)
 ------------------------------*/
 void updateScreen(){
     if(strcmp(statusBtrx,"OPENED")==0){
-      Serial.println("updateScreen:OPENED"); 
+      #ifdef DEBUG
+        Serial.println("updateScreen:OPENED");
+      #endif
       M5.dis.displaybuff((uint8_t *)image_all, 0, 0);
     }
     if((strcmp(statusBtrx,"CLOSED")==0) || (strcmp(statusBtrx,"EXPIRED")==0)){
-      Serial.println("updateScreen:CLOSED"); 
+      #ifdef DEBUG
+        Serial.println("updateScreen:CLOSED");
+      #endif 
       M5.dis.displaybuff((uint8_t *)image_all, -5, 0);
     }
     if(strcmp(statusBtrx,"PAUSED")==0){
-      Serial.println("updateScreen:PAUSED"); 
+      #ifdef DEBUG
+        Serial.println("updateScreen:PAUSED"); 
+      #endif
       M5.dis.displaybuff((uint8_t *)image_all, -15, 0);
     }
     if(strcmp(statusBtrx,"ERROR")==0){
-      Serial.println("updateScreen:OPENED"); 
+      #ifdef DEBUG
+        Serial.println("updateScreen:OPENED");
+      #endif 
       M5.dis.displaybuff((uint8_t *)image_all, -10, 0);
     }
    M5.update();
@@ -216,12 +239,9 @@ void updateScreen(){
 ------------------------------*/
 void CreateURLs(){
     strcpy(urlStatus,urnBase);                //base urn
-    strcat(urlStatus,urnUserId);              //+user ID
-    strcat(urlStatus,urnHookKey);             //+WebHookAPIKey = basic urn
-
-    strcpy(urlOpen,urlStatus);                //copy basic urn to other var
-    strcpy(urlClose,urlStatus);
-    strcpy(urlPause,urlStatus);
+    strcpy(urlOpen,urnBase);                  //copy basic urn to other var
+    strcpy(urlClose,urnBase);
+    strcpy(urlPause,urnBase);
     
     strcat(urlStatus,urnStatus);              //basic urn + command
     strcat(urlOpen,urnOpen);

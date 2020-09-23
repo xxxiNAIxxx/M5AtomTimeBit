@@ -4,12 +4,15 @@
 Выводит на дисплей текущее состояние рабочего дня (открыт, закрыт, пауза). Короткое нажатие включает\отключает перерыв. Длительное открывает\закрывает рабочий день.  
 
 ## Конфигурирование  
-Файл Settings-example переименовать в Settings.ino.  
+Файл Settings-example переименовать в Settings.ino.
+```serialSpeed = 115200;``` - скорость для сервисных и debug сообщений  
+```updateTimeInterval=10;``` - интервал обновления данных  
+```brightness=50;``` - яркость LED-панели  
+  
 ```wifiSsid     = "WiFiName"``` - указать имя беспроводной сети  
 ```wifiPassword = "WiFiPassword";``` - указать пароль беспроводной сети  
-```urnBase="https://company.bitrix24.ru/rest/";``` - путь к REST API, указать адрес сайта  
-```urnUserId="007/";``` - указать номер пользователя  
-```urnHookKey="1234567890qwertyu/"``` - указать API Key входящего вебхука  
+  
+```urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/";``` - путь к REST API, указать адрес сайта (полное описание см. [тут])  
 ```openReason="Best day of my life";``` - причина начала рабочего дня  
 ```closeReason="This is the end";``` - причина завершения рабочего дня  
     
@@ -35,7 +38,7 @@
 ```
 if( DisplayEnable )
 {
-    	dis.setTaskName("LEDs");
+    dis.setTaskName("LEDs");
 	dis.setTaskPriority(2);
 	dis.setCore(1);
 	dis.start();
