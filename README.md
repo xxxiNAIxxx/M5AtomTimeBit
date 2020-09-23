@@ -38,7 +38,7 @@
 ```
 if( DisplayEnable )
 {
-    dis.setTaskName("LEDs");
+    	dis.setTaskName("LEDs");
 	dis.setTaskPriority(2);
 	dis.setCore(1);
 	dis.start();
