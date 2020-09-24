@@ -20,7 +20,7 @@
 ```rootCa``` - сертификат УЦ битрикса
   
 Файл image_all содержит четыре иконки (5х5).  
-<img src="/image/image_all_scr.png" alt="drawing" width="100"/>  
+<img src="/image/image_all_scr.png" alt="drawing" width="200"/>  
   
 Для просмотра и редактирования можно воспользоваться [ATOOOOM Pixel TOOL](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/software/AtomPixTool.exe)
 
