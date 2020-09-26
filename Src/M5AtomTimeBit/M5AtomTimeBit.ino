@@ -114,7 +114,9 @@ void loop()
     SystemTimeUpdate++;                                   //Time counter
     #ifdef DEBUG
       Serial.print(".");
-      Serial.print(SystemTimeUpdate);                                  
+      Serial.print(SystemTimeUpdate);
+      Serial.print(" RSSI:");
+      Serial.print(WiFi.RSSI());                                    
     #endif
 }
 

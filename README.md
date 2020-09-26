@@ -1,3 +1,5 @@
+Russian | [English](README_Eng.md)
+  
 # M5AtomTimeBit
 ## Описание  
 Приложение для [M5Atom Matrix](https://m5stack.com/collections/m5-atom/products/atom-matrix-esp32-development-kit).  
@@ -5,7 +7,7 @@
   
 <img src="/image/gif.gif"/> 
 
-## Конфигурирование  
+## Настройки  
 Файл Settings-example переименовать в Settings.ino.  
 ```serialSpeed = 115200;``` - скорость для сервисных и debug сообщений  
 ```updateTimeInterval=10;``` - интервал обновления данных  
