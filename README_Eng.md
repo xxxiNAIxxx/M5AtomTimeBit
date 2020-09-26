@@ -1,4 +1,4 @@
-[Russian](README.md) | English(README_Eng.md)
+[Russian](https://github.com/xxxiNAIxxx/M5AtomTimeBit) | English  
   
 # M5AtomTimeBit
 ## Description  
@@ -16,9 +16,9 @@ Rename the Settings-example to Settings.ino.
 ```wifiSsid     = "WiFiName"``` - network name  
 ```wifiPassword = "WiFiPassword";``` - password  
   
-```urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/";``` - link to the REST API (см. [FAQ](https://github.com/xxxiNAIxxx/M5AtomTimeBit/wiki/FAQ))  
-```openReason="Best day of my life";``` - Reason to modify workday time(open). Required when specifying TIME parameter and with disabled flexible hours for a user.  
-```closeReason="This is the end";``` - Reason to modify workday time(close).  
+```urnBase="https://company.bitrix24.ru/rest/01/1234567890qwertyu/";``` - link to the REST API. You should create [inbound webhook](https://training.bitrix24.com/rest_help/rest_sum/webhooks.php). 
+```openReason="Best day of my life";``` - reason to modify workday time(open). Required when specifying TIME parameter and with disabled flexible hours for a user.  
+```closeReason="This is the end";``` - reason to modify workday time(close).  
     
 ```urnStatus, urnOpen, urnClose, urnPause``` - [API](https://training.bitrix24.com/rest_help/time_management/basic/index.php) function  
 ```rootCa``` - ssl certificate
